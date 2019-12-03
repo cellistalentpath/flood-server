@@ -64,6 +64,9 @@ setInterval(() => {
 
 var server = https.createServer((request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "*");
+  if (request.method === "GET" && request.url === "/") {
+    response.write("nice yeet");
+  }
   if (request.method === "GET" && request.url === "/map/everything") {
     response.write(getEverything(worksheet));
   }
