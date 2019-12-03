@@ -63,40 +63,37 @@ setInterval(() => {
 }, 15000); // 15 seconds
 
 var server = http.createServer((request, response) => {
-  //response.setHeader("Access-Control-Allow-Origin", "*");
+  response.setHeader("Access-Control-Allow-Origin", "*");
   if (request.method === "GET" && request.url === "/") {
-    response.write(JSON.stringify(formattedEverything));
-    response.end();
+    response.write("nice yeet");
   }
-  // if (request.method === "GET" && request.url === "/map/everything") {
-  //   response.write(getEverything(worksheet));
-  //   response.end();
-  // }
-  // if (request.method === "GET" && request.url === "/map/formatted") {
-  //   response.write(JSON.stringify(formattedEverything));
-  //   response.end();
-  // }
-  // if (request.method === "POST" && request.url === "/map/formatted") {
-  //   request.on("data", function(chunk) {
-  //     // console.log("Received body data:");
-  //     // console.log(chunk.toString());
-  //     // console.log(JSON.parse(chunk.toString()).id);
-  //     for (id in formattedEverything) {
-  //       if (
-  //         formattedEverything[id].formattedHeld ===
-  //         JSON.parse(chunk.toString()).formattedHeld
-  //       ) {
-  //         formattedEverything[id].totalResidents = JSON.parse(
-  //           chunk.toString()
-  //         ).totalResidents;
-  //       }
-  //     }
-  //     formattedEverything[JSON.parse(chunk.toString()).id] = JSON.parse(
-  //       chunk.toString()
-  //     );
-  //   });
-  //   response.end();
-  // }
+  if (request.method === "GET" && request.url === "/map/everything") {
+    response.write(getEverything(worksheet));
+  }
+  if (request.method === "GET" && request.url === "/map/formatted") {
+    response.write(JSON.stringify(formattedEverything));
+  }
+  if (request.method === "POST" && request.url === "/map/formatted") {
+    request.on("data", function(chunk) {
+      // console.log("Received body data:");
+      // console.log(chunk.toString());
+      // console.log(JSON.parse(chunk.toString()).id);
+      for (id in formattedEverything) {
+        if (
+          formattedEverything[id].formattedHeld ===
+          JSON.parse(chunk.toString()).formattedHeld
+        ) {
+          formattedEverything[id].totalResidents = JSON.parse(
+            chunk.toString()
+          ).totalResidents;
+        }
+      }
+      formattedEverything[JSON.parse(chunk.toString()).id] = JSON.parse(
+        chunk.toString()
+      );
+    });
+  }
+  response.end();
 });
 
 server.listen(port, () => {
