@@ -1,6 +1,7 @@
 var https = require("https");
 //var https = require("https"); ERR_SSL_VERSION_OR_CIPHER_MISMATCH
 var XLSX = require("xlsx");
+var cors = require("cors");
 
 var hostname = "localhost";
 var port = 4243;
@@ -70,16 +71,23 @@ var server = https.createServer((request, response) => {
     response.write(JSON.stringify(formattedEverything));
   }
   if (request.method === "POST" && request.url === "/map/formatted") {
-    request.on("data", function (chunk) {
+    request.on("data", function(chunk) {
       // console.log("Received body data:");
       // console.log(chunk.toString());
       // console.log(JSON.parse(chunk.toString()).id);
       for (id in formattedEverything) {
-        if (formattedEverything[id].formattedHeld === JSON.parse(chunk.toString()).formattedHeld) {
-          formattedEverything[id].totalResidents = JSON.parse(chunk.toString()).totalResidents;
+        if (
+          formattedEverything[id].formattedHeld ===
+          JSON.parse(chunk.toString()).formattedHeld
+        ) {
+          formattedEverything[id].totalResidents = JSON.parse(
+            chunk.toString()
+          ).totalResidents;
         }
       }
-      formattedEverything[JSON.parse(chunk.toString()).id] = JSON.parse(chunk.toString());
+      formattedEverything[JSON.parse(chunk.toString()).id] = JSON.parse(
+        chunk.toString()
+      );
     });
   }
   response.end();
