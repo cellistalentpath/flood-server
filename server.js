@@ -94,8 +94,8 @@ var server = http.createServer((request, response) => {
       formattedEverything[JSON.parse(chunk.toString()).id] = JSON.parse(
         chunk.toString()
       );
+      response.end();
     });
-    //response.end();
   }
 });
 
