@@ -95,7 +95,7 @@ var server = http.createServer((request, response) => {
         chunk.toString()
       );
     });
-    response.end();
+    //response.end();
   }
 });
 
