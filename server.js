@@ -1,4 +1,4 @@
-var https = require("https");
+var http = require("http");
 //var https = require("https"); ERR_SSL_VERSION_OR_CIPHER_MISMATCH
 var XLSX = require("xlsx");
 var cors = require("cors");
@@ -62,7 +62,7 @@ setInterval(() => {
   worksheet = getWorksheet();
 }, 15000); // 15 seconds
 
-var server = https.createServer((request, response) => {
+var server = http.createServer((request, response) => {
   //response.setHeader("Access-Control-Allow-Origin", "*");
   if (request.method === "GET" && request.url === "/") {
     response.write(JSON.stringify(formattedEverything));
