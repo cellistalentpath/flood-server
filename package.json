@@ -1,0 +1,29 @@
+{
+  "name": "flood-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "JSZip.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "googleapis": "^45.0.0",
+    "xlsx": "^0.15.1",
+    "vm": "^0.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cellistalentpath/flood-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cellistalentpath/flood-server/issues"
+  },
+  "homepage": "https://github.com/cellistalentpath/flood-server#readme"
+}
