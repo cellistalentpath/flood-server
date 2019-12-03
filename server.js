@@ -64,7 +64,7 @@ setInterval(() => {
 
 var server = https.createServer((request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "*");
-  if (request.method === "GET" && request.url === "/") {
+  if (request.method === "GET") {
     response.write(JSON.stringify(formattedEverything));
     response.end();
   }
