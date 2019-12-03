@@ -4,7 +4,7 @@ var XLSX = require("xlsx");
 var cors = require("cors");
 
 var hostname = "localhost";
-var port = 4243;
+var port = process.env.PORT || 4243;
 var formattedEverything = {};
 
 // Set up workbook for server start
@@ -93,7 +93,7 @@ var server = https.createServer((request, response) => {
   response.end();
 });
 
-server.listen(() => {
+server.listen(port, () => {
   //port, ()
   console.log(`Server running at http://${hostname}:${port}/`);
 });
