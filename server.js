@@ -63,7 +63,7 @@ setInterval(() => {
 }, 15000); // 15 seconds
 
 var server = https.createServer((request, response) => {
-  response.setHeader("Access-Control-Allow-Origin", "*");
+  //response.setHeader("Access-Control-Allow-Origin", "*");
   if (request.method === "GET" && request.url === "/") {
     response.write(JSON.stringify(formattedEverything));
     response.end();
