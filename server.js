@@ -66,12 +66,15 @@ var server = http.createServer((request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "*");
   if (request.method === "GET" && request.url === "/") {
     response.write("nice yeet");
+    response.end();
   }
   if (request.method === "GET" && request.url === "/map/everything") {
     response.write(getEverything(worksheet));
+    response.end();
   }
   if (request.method === "GET" && request.url === "/map/formatted") {
     response.write(JSON.stringify(formattedEverything));
+    response.end();
   }
   if (request.method === "POST" && request.url === "/map/formatted") {
     request.on("data", function(chunk) {
@@ -92,8 +95,8 @@ var server = http.createServer((request, response) => {
         chunk.toString()
       );
     });
+    response.end();
   }
-  response.end();
 });
 
 server.listen(port, () => {
