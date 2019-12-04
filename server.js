@@ -1,7 +1,6 @@
 var http = require("http");
 //var https = require("https"); ERR_SSL_VERSION_OR_CIPHER_MISMATCH
 var XLSX = require("xlsx");
-var cors = require("cors");
 
 var hostname = "localhost";
 var port = process.env.PORT || 4243;
