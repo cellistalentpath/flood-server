@@ -1,4 +1,5 @@
-git add flood-data.xlsx
+rclone sync -v floodmap:Documents /home/pi/Documents
+git add .
 git commit -m "new data"
-git pull
 git push origin master
+rclone sync -v /home/pi/Documents floodmap:Documents
