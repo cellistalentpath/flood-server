@@ -1,4 +1,3 @@
-git add flood-data.xlsx
+git add .
 git commit -m "new data"
-git pull
 git push origin master
