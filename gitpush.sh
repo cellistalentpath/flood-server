@@ -1,3 +1,8 @@
+#!/bin/sh
+
+mkdir /home/pi/Documents
+cd /home/pi/Documents
+
 rclone sync -v floodmap:Documents /home/pi/Documents
 git add .
 git commit -m "new data"
