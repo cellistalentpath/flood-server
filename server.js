@@ -15,8 +15,10 @@ var server = http.createServer((request, response) => {
     var body = [];
     request.on("data", function (chunk) {
       everything = body.push(chunk);
+      console.log(chunk.toString());
     }).on("end", () => {
       body = Buffer.concat(body).toString();
+      console.log(body);
       everything = JSON.parse(body);
     })
     response.end();
