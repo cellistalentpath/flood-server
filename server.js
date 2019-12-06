@@ -18,8 +18,8 @@ var server = http.createServer((request, response) => {
     }).on("end", () => {
       body = Buffer.concat(body).toString();
       everything = JSON.parse(body);
+      response.end();
     })
-    response.end();
   }
   if (request.method === "POST" && request.url === "/map/formatted") {
     request.on("data", function (chunk) {
