@@ -12,9 +12,13 @@ var server = http.createServer((request, response) => {
     response.end();
   }
   if (request.method === "POST" && request.url === "/map/everything") {
+    var body = [];
     request.on("data", function (chunk) {
-      everything = chunk.toString();
-    });
+      everything = body.push(chunk);
+    }).on("end", () => {
+      body = Buffer.concat(body).toString();
+      everything = JSON.parse(body);
+    })
     response.end();
   }
   if (request.method === "POST" && request.url === "/map/formatted") {
