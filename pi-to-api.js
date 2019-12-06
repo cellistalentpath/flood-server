@@ -80,9 +80,9 @@ server.listen(port, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-async function putEverything(newObj) {
+putEverything = newObj => {
   try {
-    await fetch("http://localhost:4243" + "/map/everything", {
+    await fetch("https://flood-map42.herokuapp.com" + "/map/everything", {
       method: "POST",
       body: JSON.stringify(newObj)
     });
