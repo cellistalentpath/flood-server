@@ -14,11 +14,9 @@ var server = http.createServer((request, response) => {
   if (request.method === "POST" && request.url === "/map/everything") {
     var body = [];
     request.on("data", function (chunk) {
-      everything = body.push(chunk);
-      console.log(chunk.toString());
+      body.push(chunk);
     }).on("end", () => {
       body = Buffer.concat(body).toString();
-      console.log(body);
       everything = JSON.parse(body);
     })
     response.end();
