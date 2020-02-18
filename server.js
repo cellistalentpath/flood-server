@@ -80,9 +80,9 @@ sendFormatted = newObj => {
 
   var req = http.request(options, function(res) {
     res.setEncoding("utf8");
-    // res.on("data", function(chunk) {
-    //   console.log("BODY: " + chunk);
-    // });
+    res.on("data", function(chunk) {
+      console.log("BODY: " + chunk);
+    });
   });
 
   req.on("error", function(e) {
