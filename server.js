@@ -1,4 +1,5 @@
 var http = require("http");
+var fetch = require("node-fetch");
 
 var hostname = "localhost";
 var port = process.env.PORT || 4243;
@@ -12,17 +13,13 @@ var server = http.createServer((request, response) => {
     response.end();
   }
   if (request.method === "POST" && request.url === "/map/everything") {
-    var body = [];
-    request.on("data", function (chunk) {
-      body.push(chunk);
-    }).on("end", () => {
-      body = Buffer.concat(body).toString();
-      everything = JSON.parse(body);
-      response.end();
-    })
+    request.on("data", function(chunk) {
+      everything = JSON.parse(chunk.toString());
+    });
+    response.end();
   }
   if (request.method === "POST" && request.url === "/map/formatted") {
-    request.on("data", function (chunk) {
+    request.on("data", function(chunk) {
       for (id in formattedEverything) {
         if (
           formattedEverything[id].formattedHeld ===
@@ -36,15 +33,61 @@ var server = http.createServer((request, response) => {
       formattedEverything[JSON.parse(chunk.toString()).id] = JSON.parse(
         chunk.toString()
       );
+      sendFormatted(formattedEverything);
       response.end();
     });
   }
   if (request.method === "GET" && request.url === "/map/formatted") {
-    response.write(JSON.stringify(formattedEverything));
-    response.end();
+    getStored().then(data => {
+      response.write(JSON.stringify(data));
+      response.end();
+    });
   }
 });
 
 server.listen(port, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+async function getStored() {
+  let addresses;
+  try {
+    const response = await fetch("http://localhost:6000" + "/store/formatted");
+    addresses = await response.text();
+    addresses = JSON.parse(addresses);
+    return addresses;
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
+}
+
+sendFormatted = newObj => {
+  var postData = JSON.stringify(newObj);
+
+  var options = {
+    hostname: "localhost",
+    port: 6000,
+    path: "/store/formatted",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Content-Length": postData.length
+    }
+  };
+
+  var req = http.request(options, function(res) {
+    res.setEncoding("utf8");
+    // res.on("data", function(chunk) {
+    //   console.log("BODY: " + chunk);
+    // });
+  });
+
+  req.on("error", function(e) {
+    console.log("problem with request: " + e.message);
+  });
+
+  // write data to request body
+  req.write(postData);
+  req.end();
+};
