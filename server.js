@@ -39,7 +39,7 @@ var server = http.createServer((request, response) => {
       formattedEverything[JSON.parse(chunk.toString()).id] = JSON.parse(
         chunk.toString()
       );
-      sendFormatted(formattedEverything);
+      sendFormatted(formattedEverything); //JSON.parse(chunk.toString())
       response.end();
     });
   }
@@ -74,7 +74,7 @@ sendFormatted = newObj => {
   var postData = JSON.stringify(newObj);
 
   var options = {
-    hostname: "71.132.173.1",
+    hostname: "71.132.173.1", //71.132.173.1
     port: 6000,
     path: "/store/formatted",
     method: "POST",
