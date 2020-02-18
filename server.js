@@ -52,7 +52,9 @@ server.listen(port, () => {
 async function getStored() {
   let addresses;
   try {
-    const response = await fetch("http://localhost:6000" + "/store/formatted");
+    const response = await fetch(
+      "http://71.132.173.1:6000" + "/store/formatted"
+    );
     addresses = await response.text();
     addresses = JSON.parse(addresses);
     return addresses;
@@ -66,7 +68,7 @@ sendFormatted = newObj => {
   var postData = JSON.stringify(newObj);
 
   var options = {
-    hostname: "localhost",
+    hostname: "71.132.173.1",
     port: 6000,
     path: "/store/formatted",
     method: "POST",
