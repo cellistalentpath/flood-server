@@ -3,16 +3,11 @@ var fetch = require("node-fetch");
 
 var hostname = "localhost";
 var port = process.env.PORT || 4243;
-var everything = {};
-var formattedEverything = {};
+var PI_URL = "http://71.132.173.1:6942";
 
 var server = http.createServer((request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "*");
-  if (request.method === "GET" && request.url === "/map/everything") {
-    response.write(JSON.stringify(everything));
-    response.end();
-  }
-  if (request.method === "POST" && request.url === "/map/everything") {
+  if (request.method === "POST" && request.url === "/store/formatted") {
     var body = [];
     request
       .on("data", function(chunk) {
@@ -20,31 +15,18 @@ var server = http.createServer((request, response) => {
       })
       .on("end", () => {
         body = Buffer.concat(body).toString();
-        everything = JSON.parse(body);
+        postFormatted(JSON.stringify(JSON.parse(body)));
         response.end();
       });
   }
-  if (request.method === "POST" && request.url === "/map/formatted") {
-    request.on("data", function(chunk) {
-      for (id in formattedEverything) {
-        if (
-          formattedEverything[id].formattedHeld ===
-          JSON.parse(chunk.toString()).formattedHeld
-        ) {
-          formattedEverything[id].totalResidents = JSON.parse(
-            chunk.toString()
-          ).totalResidents;
-        }
-      }
-      formattedEverything[JSON.parse(chunk.toString()).id] = JSON.parse(
-        chunk.toString()
-      );
-      sendFormatted(formattedEverything); //JSON.parse(chunk.toString())
+  if (request.method === "GET" && request.url === "/store/formatted") {
+    getFormatted().then(data => {
+      response.write(JSON.stringify(data));
       response.end();
     });
   }
-  if (request.method === "GET" && request.url === "/map/formatted") {
-    getStored().then(data => {
+  if (request.method === "GET" && request.url === "/store/everything") {
+    getEverything().then(data => {
       response.write(JSON.stringify(data));
       response.end();
     });
@@ -55,12 +37,22 @@ server.listen(port, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-async function getStored() {
+async function postFormatted(newObj) {
+  try {
+    await fetch(PI_URL + "/store/formatted", {
+      method: "POST",
+      body: newObj
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
+}
+
+async function getFormatted() {
   let addresses;
   try {
-    const response = await fetch(
-      "http://71.132.173.1:6000" + "/store/formatted"
-    );
+    const response = await fetch(PI_URL + "/store/formatted");
     addresses = await response.text();
     addresses = JSON.parse(addresses);
     return addresses;
@@ -70,32 +62,75 @@ async function getStored() {
   }
 }
 
-sendFormatted = newObj => {
-  var postData = JSON.stringify(newObj);
+async function getEverything() {
+  let addresses;
+  try {
+    const response = await fetch(PI_URL + "/store/everything");
+    addresses = await response.text();
+    addresses = JSON.parse(addresses);
+    return addresses;
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
+}
 
-  var options = {
-    hostname: "71.132.173.1", //71.132.173.1
-    port: 6000,
-    path: "/store/formatted",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Content-Length": postData.length
-    }
-  };
+// async function getStored() {
+//   let addresses;
+//   try {
+//     const response = await fetch(
+//       "http://71.132.173.1:6000" + "/store/formatted"
+//     );
+//     addresses = await response.text();
+//     addresses = JSON.parse(addresses);
+//     return addresses;
+//   } catch (error) {
+//     console.error("Error:", error);
+//     return null;
+//   }
+// }
 
-  var req = http.request(options, function(res) {
-    res.setEncoding("utf8");
-    res.on("data", function(chunk) {
-      console.log("BODY: " + chunk);
-    });
-  });
+// async function getNewData() {
+//   let addresses;
+//   try {
+//     const response = await fetch(
+//       "http://71.132.173.1:6000" + "/store/formatted"
+//     );
+//     addresses = await response.text();
+//     addresses = JSON.parse(addresses);
+//     return addresses;
+//   } catch (error) {
+//     console.error("Error:", error);
+//     return null;
+//   }
+// }
 
-  req.on("error", function(e) {
-    console.log("problem with request: " + e.message);
-  });
+// sendFormatted = newObj => {
+//   var postData = JSON.stringify(newObj);
 
-  // write data to request body
-  req.write(postData);
-  req.end();
-};
+//   var options = {
+//     hostname: "71.132.173.1", //71.132.173.1
+//     port: 6000,
+//     path: "/store/formatted",
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "Content-Length": postData.length
+//     }
+//   };
+
+//   var req = http.request(options, function(res) {
+//     res.setEncoding("utf8");
+//     res.on("data", function(chunk) {
+//       console.log("BODY: " + chunk);
+//     });
+//   });
+
+//   req.on("error", function(e) {
+//     console.log("problem with request: " + e.message);
+//   });
+
+//   // write data to request body
+//   req.write(postData);
+//   req.end();
+// };
