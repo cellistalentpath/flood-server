@@ -3,7 +3,7 @@ var fetch = require("node-fetch");
 
 var hostname = "localhost";
 var port = process.env.PORT || 4243;
-var PI_URL = "http://71.132.173.1:6942";
+var PI_URL = "http://192.168.1.70:6942";
 
 var server = http.createServer((request, response) => {
   response.setHeader("Access-Control-Allow-Origin", "*");
